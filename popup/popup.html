@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Letterboxd Ratings for JustWatch</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="popup-root">
+    <!-- Header -->
+    <header class="popup-header">
+      <img class="popup-logo" src="../icons/icon48.png" alt="Letterboxd for JustWatch" />
+      <div class="popup-title-block">
+        <h1 class="popup-title">Letterboxd for JustWatch</h1>
+        <span class="popup-subtitle">Letterboxd ratings on every tile</span>
+      </div>
+    </header>
+
+    <!-- Status indicator -->
+    <div class="popup-status" id="status-bar">
+      <span class="status-dot" id="status-dot"></span>
+      <span class="status-text" id="status-text">Checking...</span>
+    </div>
+
+    <!-- Stats -->
+    <div class="popup-stats" id="stats-section">
+      <div class="stat-card">
+        <span class="stat-value" id="stat-cached">—</span>
+        <span class="stat-label">Cached titles</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value" id="stat-today">—</span>
+        <span class="stat-label">Loaded today</span>
+      </div>
+    </div>
+
+    <div class="popup-divider"></div>
+
+    <!-- Settings -->
+    <div class="popup-settings">
+      <label class="toggle-row" for="toggle-enabled">
+        <span class="toggle-label">
+          <span class="toggle-title">Enable extension</span>
+          <span class="toggle-desc">Show ratings on JustWatch</span>
+        </span>
+        <div class="toggle-wrap">
+          <input type="checkbox" id="toggle-enabled" checked />
+          <span class="toggle-slider"></span>
+        </div>
+      </label>
+
+      <label class="toggle-row" for="toggle-badge">
+        <span class="toggle-label">
+          <span class="toggle-title">Badge on posters</span>
+          <span class="toggle-desc">Persistent rating pill on cards</span>
+        </span>
+        <div class="toggle-wrap">
+          <input type="checkbox" id="toggle-badge" checked />
+          <span class="toggle-slider"></span>
+        </div>
+      </label>
+
+      <label class="toggle-row" for="toggle-hover">
+        <span class="toggle-label">
+          <span class="toggle-title">Hover detail card</span>
+          <span class="toggle-desc">Expanded info on mouse hover</span>
+        </span>
+        <div class="toggle-wrap">
+          <input type="checkbox" id="toggle-hover" checked />
+          <span class="toggle-slider"></span>
+        </div>
+      </label>
+
+      <!-- Cache duration chips -->
+      <div class="chip-row">
+        <span class="toggle-label">
+          <span class="toggle-title">Cache duration</span>
+          <span class="toggle-desc">How long to store ratings locally</span>
+        </span>
+        <div class="chip-group" id="cache-duration-group">
+          <button class="chip" data-days="1">1 day</button>
+          <button class="chip chip-active" data-days="7">7 days</button>
+          <button class="chip" data-days="30">30 days</button>
+        </div>
+      </div>
+
+      <!-- Rating filter slider -->
+      <div class="slider-row">
+        <div class="slider-header">
+          <div>
+            <span class="toggle-title">Min. rating filter</span>
+            <span class="toggle-desc" style="display:block;margin-top:1px;">Hide badges below this score</span>
+          </div>
+          <span class="slider-value" id="rating-value">Off</span>
+        </div>
+        <input type="range" id="rating-slider" min="0" max="5" step="0.5" value="0" class="rating-slider" />
+        <div class="slider-track-labels">
+          <span>Off</span>
+          <span>5.0 ★</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="popup-divider"></div>
+
+    <!-- Cache clear -->
+    <button class="popup-clear-btn" id="clear-cache-btn">
+      Clear cache
+    </button>
+
+    <!-- Footer -->
+    <footer class="popup-footer">
+      <span>v1.0.0</span>
+      <a href="https://letterboxd.com" target="_blank" rel="noopener">Letterboxd ↗</a>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
