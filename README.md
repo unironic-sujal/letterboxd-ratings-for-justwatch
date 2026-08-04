@@ -29,11 +29,11 @@ A Chrome extension that overlays **Letterboxd community ratings** on every movie
 
 ## Screenshots
 
+![Full JustWatch browse grid with rating badges](screenshots/browse-grid.png)
+
 ![JustWatch browse page with Letterboxd rating badges on every movie tile](screenshots/browse-with-badges.png)
 
 ![Rating badges visible across the JustWatch movie grid](screenshots/justwatch-tiles.png)
-
-![Full JustWatch browse grid with rating badges](screenshots/browse-grid.png)
 
 ---
 
