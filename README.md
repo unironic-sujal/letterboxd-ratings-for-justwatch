@@ -2,7 +2,7 @@
 
 A Chrome extension that overlays **Letterboxd community ratings** on every movie tile as you browse [JustWatch](https://www.justwatch.com) — no clicking, no searching, no account needed.
 
-![Chrome Web Store](https://img.shields.io/chrome-web-store/v/YOUR_EXTENSION_ID?label=Chrome%20Web%20Store&logo=google-chrome&logoColor=white&color=00e054)
+[![Chrome Web Store](https://img.shields.io/chrome-web-store/v/pfmbnbkcoeajoappobofiemogcekmgfl?label=Chrome%20Web%20Store&logo=google-chrome&logoColor=white&color=00e054)](https://chromewebstore.google.com/detail/pfmbnbkcoeajoappobofiemogcekmgfl)
 ![License](https://img.shields.io/badge/license-MIT-00e054)
 
 ---
@@ -40,7 +40,7 @@ A Chrome extension that overlays **Letterboxd community ratings** on every movie
 ## Installation
 
 ### From Chrome Web Store
-[Install from the Chrome Web Store](#) *(link coming soon after review)*
+[➤ Install from the Chrome Web Store](https://chromewebstore.google.com/detail/pfmbnbkcoeajoappobofiemogcekmgfl)
 
 ### Manual install (developer mode)
 1. Download or clone this repo
