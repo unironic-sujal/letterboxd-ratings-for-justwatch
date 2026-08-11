@@ -29,35 +29,57 @@ window.addEventListener("unhandledrejection", (event) => {
   const inFlight  = new Map();
   let dead = false;
 
-  // ── Settings (minRating filter) ─────────────────────────────────────────────
-  // Loaded once at startup; live-updated via chrome.storage.onChanged below.
+  // ── Settings (all toggles + minRating filter) ──────────────────────────
+  // Loaded once at startup; kept in-sync via chrome.storage.onChanged.
 
-  let minRating = 0; // 0 = show all
+  let settings = {
+    enabled:       true,
+    showBadge:     true,
+    showHoverCard: true,
+    minRating:     0,
+  };
 
-  function loadMinRating() {
+  function loadSettings() {
     chrome.storage.local.get("lbjw_settings", (result) => {
-      minRating = parseFloat(result?.lbjw_settings?.minRating ?? 0);
+      settings = { ...settings, ...(result?.lbjw_settings ?? {}) };
+      applyAllSettings();
     });
   }
 
-  // Show/hide all injected badges based on current minRating
-  function applyRatingFilter() {
-    document.querySelectorAll(".kym-badge[data-rating]").forEach((badge) => {
-      const r = parseFloat(badge.dataset.rating ?? "0");
-      badge.style.display = (minRating > 0 && r < minRating) ? "none" : "";
+  /**
+   * Called whenever settings change.
+   * • enabled=false   → hide every badge, close any open hover card, block new scans
+   * • showBadge=false → hide .kym-badge but leave hover card wiring intact
+   * • showHoverCard   → checked at mouseenter time — no DOM changes needed here
+   * • minRating       → hide badges below threshold
+   */
+  function applyAllSettings() {
+    const { enabled, showBadge, minRating: mr } = settings;
+
+    document.querySelectorAll(".kym-badge").forEach((badge) => {
+      if (!enabled || !showBadge) {
+        badge.style.display = "none";
+      } else {
+        const r = parseFloat(badge.dataset.rating ?? "0");
+        badge.style.display = (mr > 0 && r < mr) ? "none" : "";
+      }
     });
+
+    // Remove any visible hover card if extension or hover is disabled
+    if (!enabled) {
+      document.querySelector(".kym-hover-card")?.remove();
+    }
   }
 
-  // Live-update when user changes the filter in the popup
+  // Live-update when user changes any setting in the popup
   chrome.storage.onChanged.addListener((changes) => {
     if (changes["lbjw_settings"]) {
-      const newSettings = changes["lbjw_settings"].newValue ?? {};
-      minRating = parseFloat(newSettings.minRating ?? 0);
-      applyRatingFilter();
+      settings = { ...settings, ...(changes["lbjw_settings"].newValue ?? {}) };
+      applyAllSettings();
     }
   });
 
-  loadMinRating();
+  loadSettings();
 
   // ── Safe messaging ──────────────────────────────────────────────────────────
 
@@ -249,7 +271,11 @@ window.addEventListener("unhandledrejection", (event) => {
     // Store rating as data attribute so applyRatingFilter can reference it
     badge.dataset.rating = String(data.rating);
     // Apply current filter immediately
-    if (minRating > 0 && data.rating < minRating) badge.style.display = "none";
+    if (!settings.enabled || !settings.showBadge) {
+      badge.style.display = "none";
+    } else if (settings.minRating > 0 && data.rating < settings.minRating) {
+      badge.style.display = "none";
+    }
     anchor.appendChild(badge);
   }
 
@@ -282,6 +308,9 @@ window.addEventListener("unhandledrejection", (event) => {
     badge.style.cursor = "pointer";
 
     badge.addEventListener("mouseenter", () => {
+      // Check at event-time so toggling in popup takes effect immediately
+      if (!settings.enabled || !settings.showHoverCard) return;
+
       document.querySelector(".kym-hover-card")?.remove();
 
       const hc = document.createElement("div");
@@ -322,6 +351,7 @@ window.addEventListener("unhandledrejection", (event) => {
 
   async function processCard(anchor) {
     if (anchor.hasAttribute(PROCESSED)) return;
+    if (!settings.enabled) return; // Don't process while extension is disabled
     anchor.setAttribute(PROCESSED, "true");
 
     // ── Extract all data upfront from the JustWatch tile ──────────────────
